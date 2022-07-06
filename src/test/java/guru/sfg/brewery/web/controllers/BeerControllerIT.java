@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @WebMvcTest
 public class BeerControllerIT extends BaseIT {
 
-    @WithMockUser("spring")
+   // @WithMockUser("spring")
     @Test
     void findBeers() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/beers/find"))
@@ -21,9 +21,9 @@ public class BeerControllerIT extends BaseIT {
 
     @Test
     void findBeersWithHttpBasic() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/beers/find")
+        mockMvc.perform(MockMvcRequestBuilders.get("/beers/find"))
 //                        .with(SecurityMockMvcRequestPostProcessors.httpBasic("foo", "bar"))) - will fail
-                .with(SecurityMockMvcRequestPostProcessors.httpBasic("spring", "guru")))
+//                .with(SecurityMockMvcRequestPostProcessors.httpBasic("spring", "guru")))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("beers/findBeers"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("beer"));
