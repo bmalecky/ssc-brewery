@@ -1,8 +1,10 @@
 package guru.sfg.brewery.config;
 
+import guru.sfg.brewery.security.JpaUserDetailsService;
 import guru.sfg.brewery.security.RestHeaderAuthFilter;
 import guru.sfg.brewery.security.RestUrlParameterAuthFilter;
 import guru.sfg.brewery.security.SfgPasswordEncoderFactories;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.ExampleMatcher;
@@ -79,25 +81,35 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return SfgPasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("spring")
-                .password("{bcrypt}$2a$10$h/1C7ttrZfCLgoC7Kol6ZeIaglb9vhE.RfvNQ/e73mJETOAc5P/pi")
-                .roles("ADMIN")
-                .and()
-                .withUser("user")
-                .password("{ldap}{SSHA}gh1hj2HniQauAlYqtUqRYw3UMKUQLqsZKIWcSA==") // LDAP
-                //.password("{sha256}d6a33f3b2776aa8af96daf6c7cc067d62a9623ddd8a60a066f7ef0d0e5b4473d0af71e3748872003") // sha256
-                //.password("{bcrypt15}$2a$15$DydIA0K1py8.o4ma.DmnreJByG3sWg7VSObjOGxLIFVVONJI9CNxm") // BCrypt
-                .roles("USER")
-                .and()
-                .withUser("bmalecky")
-                .password("{sha256}afec59eb607cc4df4cf059c274a2da2efee19596a10f757e9306386a808221993daa853f852fafe5")
-                .roles("CUSTOMER");
+ //   @Autowired
+ //   JpaUserDetailsService jpaUserDetailsService;
 
-        auth.inMemoryAuthentication().withUser("scott").password("{noop}tiger").roles("CUSTOMER");
-    }
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.userDetailsService(jpaUserDetailsService)
+//            .passwordEncoder(passwordEncoder());
+//    }
+
+
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.inMemoryAuthentication()
+//                .withUser("spring")
+//                .password("{bcrypt}$2a$10$h/1C7ttrZfCLgoC7Kol6ZeIaglb9vhE.RfvNQ/e73mJETOAc5P/pi")
+//                .roles("ADMIN")
+//                .and()
+//                .withUser("user")
+//                .password("{ldap}{SSHA}gh1hj2HniQauAlYqtUqRYw3UMKUQLqsZKIWcSA==") // LDAP
+//                //.password("{sha256}d6a33f3b2776aa8af96daf6c7cc067d62a9623ddd8a60a066f7ef0d0e5b4473d0af71e3748872003") // sha256
+//                //.password("{bcrypt15}$2a$15$DydIA0K1py8.o4ma.DmnreJByG3sWg7VSObjOGxLIFVVONJI9CNxm") // BCrypt
+//                .roles("USER")
+//                .and()
+//                .withUser("bmalecky")
+//                .password("{sha256}afec59eb607cc4df4cf059c274a2da2efee19596a10f757e9306386a808221993daa853f852fafe5")
+//                .roles("CUSTOMER");
+//
+//        auth.inMemoryAuthentication().withUser("scott").password("{noop}tiger").roles("CUSTOMER");
+//    }
 
     //    @Override
 //    @Bean
