@@ -20,6 +20,12 @@ public class BeerRestControllerIT extends BaseIT {
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
+    @Test
+    void findBeersByUpc() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/beerUpc/0631234200036"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
 
 
 }
