@@ -56,16 +56,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
             .authorizeRequests((authorize) -> {
-                authorize.antMatchers("/", "/webjars/**", "/login", "/resources/**").permitAll()
-                        .antMatchers("/beers/find", "/beers*").permitAll()
-                        .antMatchers(HttpMethod.GET, "/api/v1/beer/**").permitAll()
-                        .mvcMatchers(HttpMethod.GET, "/api/v1/beerUpc/{upc}").permitAll();
+                authorize.antMatchers("/h2-console/**").permitAll() // do not use in production!!
+                    .antMatchers("/", "/webjars/**", "/login", "/resources/**").permitAll()
+                    .antMatchers("/beers/find", "/beers*").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/v1/beer/**").permitAll()
+                    .mvcMatchers(HttpMethod.GET, "/api/v1/beerUpc/{upc}").permitAll();
             })
             .authorizeRequests()
             .anyRequest().authenticated()
             .and()
             .formLogin().and()
             .httpBasic();
+
+        // h2 console config
+        http.headers().frameOptions().sameOrigin();
     }
 
     @Bean
@@ -83,14 +87,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .roles("ADMIN")
                 .and()
                 .withUser("user")
-                //.password("{SSHA}gh1hj2HniQauAlYqtUqRYw3UMKUQLqsZKIWcSA==") // LDAP
-                //.password("d6a33f3b2776aa8af96daf6c7cc067d62a9623ddd8a60a066f7ef0d0e5b4473d0af71e3748872003") // sha256
-                .password("{bcrypt15}$2a$15$DydIA0K1py8.o4ma.DmnreJByG3sWg7VSObjOGxLIFVVONJI9CNxm") // BCrypt
+                .password("{ldap}{SSHA}gh1hj2HniQauAlYqtUqRYw3UMKUQLqsZKIWcSA==") // LDAP
+                //.password("{sha256}d6a33f3b2776aa8af96daf6c7cc067d62a9623ddd8a60a066f7ef0d0e5b4473d0af71e3748872003") // sha256
+                //.password("{bcrypt15}$2a$15$DydIA0K1py8.o4ma.DmnreJByG3sWg7VSObjOGxLIFVVONJI9CNxm") // BCrypt
                 .roles("USER")
                 .and()
                 .withUser("bmalecky")
                 .password("{sha256}afec59eb607cc4df4cf059c274a2da2efee19596a10f757e9306386a808221993daa853f852fafe5")
-                .roles("USER");
+                .roles("CUSTOMER");
 
         auth.inMemoryAuthentication().withUser("scott").password("{noop}tiger").roles("CUSTOMER");
     }

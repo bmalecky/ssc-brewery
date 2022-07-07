@@ -16,7 +16,7 @@ public class SfgPasswordEncoderFactories {
     private SfgPasswordEncoderFactories() {}
 
     public static PasswordEncoder createDelegatingPasswordEncoder() {
-        String encodingId = "bcrypt15";
+        String encodingId = "bcrypt10";
         Map<String, PasswordEncoder> encoders = new HashMap<>();
         encoders.put(encodingId, new BCryptPasswordEncoder(15));
         encoders.put("bcrypt", new BCryptPasswordEncoder());
