@@ -17,7 +17,6 @@ public class UserDataLoader implements CommandLineRunner {
 
   private final UserRepository userRepository;
   private final AuthorityRepository authorityRepository;
-
   private final PasswordEncoder passwordEncoder;
 
   @Override
@@ -30,13 +29,13 @@ public class UserDataLoader implements CommandLineRunner {
     long count = authorityRepository.count();
     if (count > 0) {return;}
 
-    Authority authorityAdmin = Authority.builder().role("ADMIN").build();
+    Authority authorityAdmin = Authority.builder().role("ROLE_ADMIN").build();
     authorityAdmin = authorityRepository.save(authorityAdmin);
 
-    Authority authorityUser = Authority.builder().role("USER").build();
+    Authority authorityUser = Authority.builder().role("ROLE_USER").build();
     authorityUser = authorityRepository.save(authorityUser);
 
-    Authority authorityCustomer = Authority.builder().role("CUSTOMER").build();
+    Authority authorityCustomer = Authority.builder().role("ROLE_CUSTOMER").build();
     authorityCustomer = authorityRepository.save(authorityCustomer);
 
     User userSpring = User.builder()
