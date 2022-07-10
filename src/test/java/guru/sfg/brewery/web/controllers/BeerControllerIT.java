@@ -21,11 +21,18 @@ public class BeerControllerIT extends BaseIT {
   class InitNewForm {
 
     @ParameterizedTest(name = "#{index} with [{arguments}]")
-    @MethodSource("guru.sfg.brewery.web.controllers.BaseIT#getStreamAllUsers")
-    void initCreationFormAuth(String user, String pwd) throws Exception {
+    @MethodSource("guru.sfg.brewery.web.controllers.BaseIT#getStreamNotAdmin")
+    void initCreationFormNoAuthority(String user, String pwd) throws Exception {
 
       mockMvc.perform(MockMvcRequestBuilders.get("/beers/new")
           .with(SecurityMockMvcRequestPostProcessors.httpBasic(user, pwd)))
+          .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
+    @Test
+    void initCreationFormAdmin() throws Exception {
+      mockMvc.perform(MockMvcRequestBuilders.get("/beers/new")
+          .with(SecurityMockMvcRequestPostProcessors.httpBasic("spring", "guru")))
           .andExpect(MockMvcResultMatchers.status().isOk())
           .andExpect(MockMvcResultMatchers.view().name("beers/createBeer"))
           .andExpect(MockMvcResultMatchers.model().attributeExists("beer"));

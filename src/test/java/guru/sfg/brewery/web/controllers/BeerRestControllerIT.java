@@ -201,13 +201,13 @@ public class BeerRestControllerIT extends BaseIT {
     }
 
 
-    @Test
-    void findBeerFormAdminRole() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/beers").param("beerName", "")
-                .with(SecurityMockMvcRequestPostProcessors.httpBasic("spring", "guru")))
-            .andExpect(MockMvcResultMatchers.status().isOk());
-    }
-
+//    @Test
+//    void findBeerFormAdminRole() throws Exception {
+//        mockMvc.perform(MockMvcRequestBuilders.get("/beers").param("beerName", "")
+//                .with(SecurityMockMvcRequestPostProcessors.httpBasic("spring", "guru")))
+//            .andExpect(MockMvcResultMatchers.status().isOk());
+//    }
+//
 
 
 }
