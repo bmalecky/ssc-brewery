@@ -45,6 +45,7 @@ public class CustomerControllerIT extends BaseIT {
     void processCreationFormAdminRole() throws Exception {
 
       mockMvc.perform(MockMvcRequestBuilders.post("/customers/new")
+          .with(SecurityMockMvcRequestPostProcessors.csrf())
           .param("customerName", "Foo Customer")
           .with(SecurityMockMvcRequestPostProcessors.httpBasic("spring", "guru")))
           .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
@@ -65,7 +66,7 @@ public class CustomerControllerIT extends BaseIT {
     @Test
     void processCreationFormNoAuthentication() throws Exception {
 
-      mockMvc.perform(MockMvcRequestBuilders.post("/customers/new")
+      mockMvc.perform(MockMvcRequestBuilders.post("/customers/new").with(SecurityMockMvcRequestPostProcessors.csrf())
               .param("customerName", "Foo Customer2"))
           .andExpect(MockMvcResultMatchers.status().isUnauthorized());
     }

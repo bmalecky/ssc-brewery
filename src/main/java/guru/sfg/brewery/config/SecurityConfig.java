@@ -58,12 +58,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.addFilterBefore(restHeaderAuthFilter(authenticationManager()),
-                        UsernamePasswordAuthenticationFilter.class)
-                .csrf().disable();
+                        UsernamePasswordAuthenticationFilter.class);
 
         http.addFilterBefore(restUrlParameterAuthFilter(authenticationManager()),
-                        UsernamePasswordAuthenticationFilter.class)
-                .csrf().disable();
+                        UsernamePasswordAuthenticationFilter.class);
 
         http
             .authorizeRequests((authorize) -> {
@@ -79,8 +77,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
             .anyRequest().authenticated()
             .and()
-            .formLogin().and()
-            .httpBasic();
+            .formLogin(loginConfigurer -> {
+                loginConfigurer.loginProcessingUrl("/login")
+                    .loginPage("/").permitAll()
+                    .successForwardUrl("/")
+                    .defaultSuccessUrl("/")
+                    .failureUrl("/?error");
+            })
+            .logout(logoutConfigurer -> {
+                logoutConfigurer.logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
+                    .logoutSuccessUrl("/?logout").permitAll();
+            })
+            .httpBasic()
+            .and().csrf().ignoringAntMatchers("/h2-console/**", "/api/**");
 
         // h2 console config
         http.headers().frameOptions().sameOrigin();
