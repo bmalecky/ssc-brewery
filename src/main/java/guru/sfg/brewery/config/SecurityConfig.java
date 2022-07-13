@@ -4,9 +4,11 @@ import guru.sfg.brewery.security.JpaUserDetailsService;
 import guru.sfg.brewery.security.RestHeaderAuthFilter;
 import guru.sfg.brewery.security.RestUrlParameterAuthFilter;
 import guru.sfg.brewery.security.SfgPasswordEncoderFactories;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.annotation.Persistent;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,14 +29,19 @@ import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.util.matcher.AndRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 //@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final UserDetailsService userDetailsService;
+    private final PersistentTokenRepository persistentTokenRepository;
 
     // needed for use with Spring Data JPA SPeL
     @Bean
@@ -89,7 +96,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .logoutSuccessUrl("/?logout").permitAll();
             })
             .httpBasic()
-            .and().csrf().ignoringAntMatchers("/h2-console/**", "/api/**");
+            .and().csrf().ignoringAntMatchers("/h2-console/**", "/api/**")
+            .and().rememberMe()
+                .tokenRepository(persistentTokenRepository).userDetailsService(userDetailsService);
+
+
+//            .rememberMe()
+//                .key("sfg-key").userDetailsService(userDetailsService);
 
         // h2 console config
         http.headers().frameOptions().sameOrigin();
