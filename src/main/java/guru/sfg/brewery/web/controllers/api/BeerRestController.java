@@ -127,6 +127,7 @@ public class BeerRestController {
     }
 
     //@PreAuthorize("hasAuthority('beer.delete')")
+    @CrossOrigin
     @BeerDeletePermission
     @DeleteMapping({"beer/{beerId}"})
     @ResponseStatus(HttpStatus.NO_CONTENT)

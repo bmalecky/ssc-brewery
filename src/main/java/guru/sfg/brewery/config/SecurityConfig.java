@@ -76,7 +76,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.addFilterBefore(google2faFilter, SessionManagementFilter.class);
 
-        http
+        http.cors().and()
             .authorizeRequests((authorize) -> {
                 authorize.antMatchers("/h2-console/**").permitAll() // do not use in production!!
                     .antMatchers("/", "/webjars/**", "/login", "/resources/**").permitAll();
@@ -114,12 +114,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().sameOrigin();
     }
 
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        // return new StandardPasswordEncoder();
-        //  return new BCryptPasswordEncoder(15);
-        return SfgPasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
+//    @Bean
+//    PasswordEncoder passwordEncoder() {
+//        // return new StandardPasswordEncoder();
+//        //  return new BCryptPasswordEncoder(15);
+//        return SfgPasswordEncoderFactories.createDelegatingPasswordEncoder();
+//    }
 
  //   @Autowired
  //   JpaUserDetailsService jpaUserDetailsService;
